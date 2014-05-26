@@ -20,6 +20,7 @@ and sending IPv6 Router Advertisements (RA).
 %patch0 -p1
 
 %build
+CFLAGS="%{?optflags}" LDFLAGS="%{?__global_ldflags}"
 make -C src/
 
 %install
@@ -34,7 +35,7 @@ install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_comp
 %doc LICENSE README.md TODO.md config.example
 %{_bindir}/rad
 %{_bindir}/ractl
-%config %{_sysconfdir}/bash_completion.d/*
+%config %{_sysconfdir}/bash_completion.d/ractl
 
 %changelog
 * Mon May 26 2014 Florian Lehner <dev@der-flo.net> 0.5-3
@@ -49,6 +50,7 @@ install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_comp
 - Add information about Patch0
 - Add _hardend_build
 - Fix issue on installing bash_completion.d
+- Add CFLAGS and LDFLAGS options in front of make
 
 * Fri May 23 2014 Florian Lehner <dev@der-flo.net> 0.5-2
 - Add Patch for arm7hl
