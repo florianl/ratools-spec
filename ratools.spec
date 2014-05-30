@@ -18,7 +18,7 @@ and sending IPv6 Router Advertisements (RA).
 %build
 CFLAGS="%{?optflags}"				\
 LDFLAGS="%{?__global_ldflags}"		\
-make -C src/
+make %{?_smp_mflags} -C src/
 
 %install
 mkdir -p %{buildroot}%{_bindir}
@@ -37,6 +37,7 @@ install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_comp
 %changelog
 * Fri May 30 2014 Florian Lehner <dev@der-flo.net> 0.5.2-1
 - Update to new version
+- Use smp_mflags while make
 
 * Mon May 26 2014 Florian Lehner <dev@der-flo.net> 0.5-3
 - Set permissions on files properly
