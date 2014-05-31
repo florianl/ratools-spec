@@ -2,14 +2,14 @@
 
 Name:			ratools
 Version:		0.5.2
-Release:		2%{?dist}
+Release:		3%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
 Source0:		https://github.com/danrl/ratools/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 %description
-ratools is a fast, dynamic, multi-threading framework for creating, modifying
+Ratools is a fast, dynamic, multi-threading framework for creating, modifying
 and sending IPv6 Router Advertisements (RA).
 
 %prep
@@ -28,6 +28,9 @@ install -pm 0755 bin/ractl %{buildroot}%{_bindir}/ractl
 mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/*
 install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_completion.d/ractl
 
+mkdir -p %{buildroot}%{_mandir}/man1
+install -pm 0644 man/*.1 %{buildroot}%{_mandir}/man1
+
 %files
 %doc LICENSE README.md TODO.md config.example
 %{_bindir}/rad
@@ -36,8 +39,12 @@ install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_comp
 # since this file is NOT config as meant to be customized by the user.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1100899#c6
 %config %{_sysconfdir}/bash_completion.d/ractl
+%{_mandir}/man1/*.1*
 
 %changelog
+* Sat May 31 2014 Florian Lehner <dev@der-flo.net> 0.5.2-3
+- add manpage
+
 * Sat May 31 2014 Florian Lehner <dev@der-flo.net> 0.5.2-2
 - Add comment about not using noreplace
 - Rename Source0 after downloading
@@ -65,4 +72,4 @@ install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_comp
 - Add Patch for arm7hl
 
 * Fri May 23 2014 Florian Lehner <dev@der-flo.net> 0.5-1
-- Initial packaging
+- Initial packaging (#1100899)
