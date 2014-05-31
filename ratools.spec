@@ -2,11 +2,11 @@
 
 Name:			ratools
 Version:		0.5.2
-Release:		1%{?dist}
+Release:		2%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
-Source0:		https://github.com/danrl/ratools/archive/v%{version}.tar.gz
+Source0:		https://github.com/danrl/ratools/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 %description
 ratools is a fast, dynamic, multi-threading framework for creating, modifying
@@ -32,9 +32,16 @@ install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_comp
 %doc LICENSE README.md TODO.md config.example
 %{_bindir}/rad
 %{_bindir}/ractl
- %config %{_sysconfdir}/bash_completion.d/ractl
+# Setting (noreplace) for the bash-completion is a bad idea,
+# since this file is NOT config as meant to be customized by the user.
+# https://bugzilla.redhat.com/show_bug.cgi?id=1100899#c6
+%config %{_sysconfdir}/bash_completion.d/ractl
 
 %changelog
+* Sat May 31 2014 Florian Lehner <dev@der-flo.net> 0.5.2-2
+- Add comment about not using noreplace
+- Rename Source0 after downloading
+
 * Fri May 30 2014 Florian Lehner <dev@der-flo.net> 0.5.2-1
 - Update to new version
 - Use smp_mflags while make
