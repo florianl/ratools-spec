@@ -2,7 +2,7 @@
 
 Name:			ratools
 Version:		0.5.2
-Release:		3%{?dist}
+Release:		4%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
@@ -42,6 +42,9 @@ install -pm 0644 man/*.1 %{buildroot}%{_mandir}/man1
 %{_mandir}/man1/*.1*
 
 %changelog
+* Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Sat May 31 2014 Florian Lehner <dev@der-flo.net> 0.5.2-3
 - add manpage
 
