@@ -1,12 +1,15 @@
 %global _hardened_build 1
 
 Name:			ratools
-Version:		0.5.2
-Release:		4%{?dist}
+Version:		0.5.3
+Release:		1%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
 Source0:		https://github.com/danrl/ratools/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+
+Requires(post):	systemd
+BuildRequires:	systemd
 
 %description
 Ratools is a fast, dynamic, multi-threading framework for creating, modifying
@@ -28,20 +31,36 @@ install -pm 0755 bin/ractl %{buildroot}%{_bindir}/ractl
 mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/*
 install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_completion.d/ractl
 
-mkdir -p %{buildroot}%{_mandir}/man1
-install -pm 0644 man/*.1 %{buildroot}%{_mandir}/man1
+mkdir -p %{buildroot}%{_mandir}/man8
+install -pm 0644 man/*.8 %{buildroot}%{_mandir}/man8
+
+mkdir -p %{buildroot}%{_unitdir}
+install -pm 0644 systemd/ratools-rad.service %{buildroot}%{_unitdir}/ratools-rad.service
+install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.socket
+
+
+%post
+%systemd_post ratools-rad.service
 
 %files
-%doc LICENSE README.md TODO.md config.example
+%doc LICENSE README.md TODO.md example.conf
 %{_bindir}/rad
 %{_bindir}/ractl
 # Setting (noreplace) for the bash-completion is a bad idea,
 # since this file is NOT config as meant to be customized by the user.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1100899#c6
 %config %{_sysconfdir}/bash_completion.d/ractl
-%{_mandir}/man1/*.1*
+%{_mandir}/man8/*.8*
+%{_unitdir}/ratools-rad.service
+%{_unitdir}/ratools-rad.socket
 
 %changelog
+* Mon Jun 16 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-1
+- Move ractl.8-manpage from section 1 to section 8
+- Add rad.8-manpage
+- Add Systemd files
+- Move config.example to example.conf
+
 * Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
