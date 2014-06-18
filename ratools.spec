@@ -2,14 +2,16 @@
 
 Name:			ratools
 Version:		0.5.3
-Release:		1%{?dist}
+Release:		2%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
 Source0:		https://github.com/danrl/ratools/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
-Requires(post):	systemd
-BuildRequires:	systemd
+Requires(post):		systemd
+Requires(preun):	systemd
+Requires(postun):	systemd
+BuildRequires:		systemd
 
 %description
 Ratools is a fast, dynamic, multi-threading framework for creating, modifying
@@ -38,9 +40,14 @@ mkdir -p %{buildroot}%{_unitdir}
 install -pm 0644 systemd/ratools-rad.service %{buildroot}%{_unitdir}/ratools-rad.service
 install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.socket
 
-
 %post
 %systemd_post ratools-rad.service
+
+%preun
+%systemd_preun ratools-rad.service
+
+%postun
+%systemd_postun_with_restart ratools-rad.service
 
 %files
 %doc LICENSE README.md TODO.md example.conf
@@ -55,6 +62,9 @@ install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.
 %{_unitdir}/ratools-rad.socket
 
 %changelog
+* Wed Jun 18 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-2
+- Use macroized scriptlets for systemd
+
 * Mon Jun 16 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-1
 - Move ractl.8-manpage from section 1 to section 8
 - Add rad.8-manpage
