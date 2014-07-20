@@ -1,17 +1,23 @@
 %global _hardened_build 1
 
+%if 0%{?fedora} || 0%{?rhel} >= 7
+    %global with_systemd 1
+%endif # 0%{?fedora} || 0%{?rhel} >= 7
+
 Name:			ratools
 Version:		0.5.3
-Release:		3%{?dist}
+Release:		4%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
 Source0:		https://github.com/danrl/ratools/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
+%if 0%{?with_systemd}
 Requires(post):		systemd
 Requires(preun):	systemd
 Requires(postun):	systemd
 BuildRequires:		systemd
+%endif # with_systemd
 
 %description
 Ratools is a fast, dynamic, multi-threading framework for creating, modifying
@@ -36,6 +42,7 @@ LDFLAGS="%{?__global_ldflags}"		\
 %{__mkdir_p} %{buildroot}%{_mandir}/man8
 %{__install} -pm 0644 man/*.8 %{buildroot}%{_mandir}/man8
 
+%if 0%{?with_systemd}
 %{__mkdir_p} %{buildroot}%{_unitdir}
 %{__install} -pm 0644 systemd/ratools-rad.service %{buildroot}%{_unitdir}/ratools-rad.service
 %{__install} -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.socket
@@ -48,6 +55,7 @@ LDFLAGS="%{?__global_ldflags}"		\
 
 %postun
 %systemd_postun_with_restart ratools-rad.service
+%endif # with_systemd
 
 %files
 %doc LICENSE README.md TODO.md example.conf
@@ -58,10 +66,15 @@ LDFLAGS="%{?__global_ldflags}"		\
 # https://bugzilla.redhat.com/show_bug.cgi?id=1100899#c6
 %config %{_sysconfdir}/bash_completion.d/ractl
 %{_mandir}/man8/*.8*
+%if 0%{?with_systemd}
 %{_unitdir}/ratools-rad.service
 %{_unitdir}/ratools-rad.socket
+%endif # with_systemd
 
 %changelog
+* Sun Jul 20 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-4
+- Use systemd only on supported platforms
+
 * Sun Jul 20 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-3
 - Replace mkdir and install with its macro
 
