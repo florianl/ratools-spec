@@ -2,7 +2,7 @@
 
 Name:			ratools
 Version:		0.5.3
-Release:		2%{?dist}
+Release:		3%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
@@ -23,22 +23,22 @@ and sending IPv6 Router Advertisements (RA).
 %build
 CFLAGS="%{?optflags}"				\
 LDFLAGS="%{?__global_ldflags}"		\
-make %{?_smp_mflags} -C src/
+%{__make} %{?_smp_mflags} -C src/
 
 %install
-mkdir -p %{buildroot}%{_bindir}
-install -pm 0755 bin/rad %{buildroot}%{_bindir}/rad
-install -pm 0755 bin/ractl %{buildroot}%{_bindir}/ractl
+%{__mkdir_p} %{buildroot}%{_bindir}
+%{__install} -pm 0755 bin/rad %{buildroot}%{_bindir}/rad
+%{__install} -pm 0755 bin/ractl %{buildroot}%{_bindir}/ractl
 
-mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/*
-install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_completion.d/ractl
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/bash_completion.d/*
+%{__install} -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_completion.d/ractl
 
-mkdir -p %{buildroot}%{_mandir}/man8
-install -pm 0644 man/*.8 %{buildroot}%{_mandir}/man8
+%{__mkdir_p} %{buildroot}%{_mandir}/man8
+%{__install} -pm 0644 man/*.8 %{buildroot}%{_mandir}/man8
 
-mkdir -p %{buildroot}%{_unitdir}
-install -pm 0644 systemd/ratools-rad.service %{buildroot}%{_unitdir}/ratools-rad.service
-install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.socket
+%{__mkdir_p} %{buildroot}%{_unitdir}
+%{__install} -pm 0644 systemd/ratools-rad.service %{buildroot}%{_unitdir}/ratools-rad.service
+%{__install} -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.socket
 
 %post
 %systemd_post ratools-rad.service
@@ -62,6 +62,9 @@ install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.
 %{_unitdir}/ratools-rad.socket
 
 %changelog
+* Sun Jul 20 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-3
+- Replace mkdir and install with its macro
+
 * Wed Jun 18 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-2
 - Use macroized scriptlets for systemd
 
