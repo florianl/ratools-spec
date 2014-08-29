@@ -5,8 +5,8 @@
 %endif # 0%{?fedora} || 0%{?rhel} >= 7
 
 Name:			ratools
-Version:		0.5.3
-Release:		4%{?dist}
+Version:		0.5.4
+Release:		1%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
 URL:			https://www.nonattached.net/ratools
@@ -29,23 +29,23 @@ and sending IPv6 Router Advertisements (RA).
 %build
 CFLAGS="%{?optflags}"				\
 LDFLAGS="%{?__global_ldflags}"		\
-%{__make} %{?_smp_mflags} -C src/
+make %{?_smp_mflags} -C src/
 
 %install
-%{__mkdir_p} %{buildroot}%{_bindir}
-%{__install} -pm 0755 bin/rad %{buildroot}%{_bindir}/rad
-%{__install} -pm 0755 bin/ractl %{buildroot}%{_bindir}/ractl
+mkdir -p %{buildroot}%{_bindir}
+install -pm 0755 bin/rad %{buildroot}%{_bindir}/rad
+install -pm 0755 bin/ractl %{buildroot}%{_bindir}/ractl
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/bash_completion.d/*
-%{__install} -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_completion.d/ractl
+mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/*
+install -pm 0644 bash-completion.d/ractl.sh %{buildroot}%{_sysconfdir}/bash_completion.d/ractl
 
-%{__mkdir_p} %{buildroot}%{_mandir}/man8
-%{__install} -pm 0644 man/*.8 %{buildroot}%{_mandir}/man8
+mkdir -p %{buildroot}%{_mandir}/man8
+install -pm 0644 man/*.8 %{buildroot}%{_mandir}/man8
 
 %if 0%{?with_systemd}
-%{__mkdir_p} %{buildroot}%{_unitdir}
-%{__install} -pm 0644 systemd/ratools-rad.service %{buildroot}%{_unitdir}/ratools-rad.service
-%{__install} -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.socket
+mkdir -p %{buildroot}%{_unitdir}
+install -pm 0644 systemd/ratools-rad.service %{buildroot}%{_unitdir}/ratools-rad.service
+install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.socket
 
 %post
 %systemd_post ratools-rad.service
@@ -72,6 +72,12 @@ LDFLAGS="%{?__global_ldflags}"		\
 %endif # with_systemd
 
 %changelog
+* Sun Aug 24 2014 Florian Lehner <dev@der-flo.net> - 0.5.4-1
+- Update version to 0.5.4
+
+* Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.3-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Sun Jul 20 2014 Florian Lehner <dev@der-flo.net> - 0.5.3-4
 - Use systemd only on supported platforms
 
