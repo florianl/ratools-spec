@@ -5,7 +5,7 @@
 %endif # 0%{?fedora} || 0%{?rhel} >= 7
 
 Name:			ratools
-Version:		0.5.4
+Version:		0.6.0
 Release:		1%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
@@ -72,6 +72,9 @@ install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.
 %endif # with_systemd
 
 %changelog
+* Mon Dec 29 2014 Florian Lehner <dev@der-flo.net> - 0.6.0-1
+- Update to Version 0.6.0
+
 * Sun Aug 24 2014 Florian Lehner <dev@der-flo.net> - 0.5.4-1
 - Update version to 0.5.4
 
