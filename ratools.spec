@@ -5,7 +5,7 @@
 %endif # 0%{?fedora} || 0%{?rhel} >= 7
 
 Name:			ratools
-Version:		0.6.0
+Version:		0.6.1
 Release:		1%{?dist}
 Summary:		Framework for IPv6 Router Advertisements
 License:		ASL 2.0
@@ -58,7 +58,9 @@ install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.
 %endif # with_systemd
 
 %files
-%doc LICENSE README.md TODO.md example.conf
+%doc README.md example.conf
+%{!?_licensedir:%global license %%doc}
+%license LICENSE
 %{_bindir}/rad
 %{_bindir}/ractl
 # Setting (noreplace) for the bash-completion is a bad idea,
@@ -72,6 +74,10 @@ install -pm 0644 systemd/ratools-rad.socket %{buildroot}%{_unitdir}/ratools-rad.
 %endif # with_systemd
 
 %changelog
+* Wed Mar 18 2015 Florian Lehner <dev@der-flo.net> - 0.6.1-1
+- Update to Version 0.6.1
+- Use license-Macro
+
 * Mon Dec 29 2014 Florian Lehner <dev@der-flo.net> - 0.6.0-1
 - Update to Version 0.6.0
 
